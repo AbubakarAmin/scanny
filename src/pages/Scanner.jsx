@@ -113,6 +113,8 @@ export default function Scanner() {
     setActiveTicket(null)
     setScanStatus('scanning')
     setResumeTimer(0)
+    // Prevent immediately rescanning the same code upon resuming
+    lastScanTime.current = Date.now()
   }
 
   const onScanSuccess = (decodedText) => {
@@ -256,41 +258,39 @@ export default function Scanner() {
       {/* Main Camera / Visual Area */}
       <div className="flex-1 flex flex-col justify-between space-y-6">
         
-        {scanStatus === 'scanning' && (
-          <div className="flex-1 flex flex-col justify-center">
-            {cameraPermission === false ? (
-              <div className="glass-panel p-8 rounded-2xl text-center space-y-4 border-brand-danger/30">
-                <span className="text-5xl block">📷</span>
-                <h4 className="text-lg font-bold text-white">Camera Access Blocked</h4>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  Please enable camera permission in your mobile browser settings to scan QR tickets.
+        <div className={`flex-1 flex flex-col justify-center ${scanStatus === 'scanning' ? '' : 'hidden'}`}>
+          {cameraPermission === false ? (
+            <div className="glass-panel p-8 rounded-2xl text-center space-y-4 border-brand-danger/30">
+              <span className="text-5xl block">📷</span>
+              <h4 className="text-lg font-bold text-white">Camera Access Blocked</h4>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Please enable camera permission in your mobile browser settings to scan QR tickets.
+              </p>
+              <button
+                onClick={() => {
+                  stopScanner().then(() => initializeScanner())
+                }}
+                className="w-full btn-primary py-2.5 text-xs font-bold"
+              >
+                Retry Camera Initialization
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="text-center">
+                <p className="text-sm font-semibold text-brand-accent animate-pulse-slow">
+                  🎥 Camera Scanner Active
                 </p>
-                <button
-                  onClick={() => {
-                    stopScanner().then(() => initializeScanner())
-                  }}
-                  className="w-full btn-primary py-2.5 text-xs font-bold"
-                >
-                  Retry Camera Initialization
-                </button>
+                <p className="text-xs text-slate-400 mt-1">Align the QR code inside the box to scan</p>
               </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-brand-accent animate-pulse-slow">
-                    🎥 Camera Scanner Active
-                  </p>
-                  <p className="text-xs text-slate-400 mt-1">Align the QR code inside the box to scan</p>
-                </div>
 
-                <div className="scanner-container border-2 border-brand-accent/50 shadow-2xl shadow-brand-accent/5">
-                  <div className="scanner-laser"></div>
-                  <div id="reader" className="w-full bg-brand-dark/95"></div>
-                </div>
+              <div className="scanner-container border-2 border-brand-accent/50 shadow-2xl shadow-brand-accent/5">
+                <div className="scanner-laser"></div>
+                <div id="reader" className="w-full bg-brand-dark/95"></div>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
         {/* PROCESSING STATE BANNER */}
         {scanStatus === 'processing' && (
