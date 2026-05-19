@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-brand-dark text-slate-100 font-sans antialiased min-h-screen selection:bg-brand-accent selection:text-white overflow-x-hidden;
+    background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                      radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+}
+
+/* Glassmorphism custom classes */
+.glass-panel {
+  @apply bg-brand-card/75 border border-brand-border/40 backdrop-blur-xl shadow-2xl;
+}
+
+.glass-panel-glow {
+  @apply bg-brand-card/85 border border-brand-accent/30 backdrop-blur-xl shadow-2xl shadow-brand-accent/10;
+}
+
+.glass-input {
+  @apply w-full bg-brand-dark/50 border border-brand-border/60 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all duration-200;
+}
+
+.btn-primary {
+  @apply px-6 py-3 bg-gradient-to-r from-brand-accent to-brand-accentHolo text-white font-medium rounded-xl hover:shadow-lg hover:shadow-brand-accent/30 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 bg-brand-card/80 border border-brand-border text-slate-200 font-medium rounded-xl hover:bg-brand-border/40 hover:text-white focus:outline-none active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-danger {
+  @apply px-6 py-3 bg-gradient-to-r from-brand-danger to-red-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-red-500/20 focus:outline-none active:scale-95 transition-all duration-200;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-brand-dark;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-border/80 rounded-full hover:bg-brand-accent/60 transition-all;
+}
+
+/* Live camera scanner overlays */
+.scanner-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.scanner-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #6366f1, transparent);
+  animation: scan 2s linear infinite;
+  z-index: 10;
+}
+
+@keyframes scan {
+  0% { top: 0%; }
+  50% { top: 100%; }
+  100% { top: 0%; }
+}
